@@ -16,6 +16,8 @@ export default defineConfig({
       PEY_API_URL: envField.string({ context: 'server', access: 'public', default: 'https://api.dev.pey.mx' }),
       PEY_API_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
       PEY_WEBHOOK_SECRET: envField.string({ context: 'server', access: 'secret', optional: true }),
+      PEY_BANK_ACCOUNT_ID: envField.string({ context: 'server', access: 'secret', optional: true }),
+      PEY_MOCK: envField.boolean({ context: 'server', access: 'secret', default: false }),
       FIREBASE_SERVICE_ACCOUNT: envField.string({ context: 'server', access: 'secret', optional: true }),
       PUBLIC_FIREBASE_API_KEY: envField.string({ context: 'client', access: 'public' }),
       PUBLIC_FIREBASE_AUTH_DOMAIN: envField.string({ context: 'client', access: 'public' }),
