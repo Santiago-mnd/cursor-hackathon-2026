@@ -71,3 +71,27 @@ export async function createPush(input: CreatePushInput): Promise<CreatePushResu
   }
   return request('/codi/pn', { ...input });
 }
+
+interface PeyTransaction {
+  id: string;
+  status: 'PENDING' | 'PAID';
+  amount: number;
+}
+
+async function read<T>(path: string): Promise<T> {
+  if (!PEY_API_KEY) throw new PeyError(503, { error: 'Falta PEY_API_KEY' });
+  const response = await fetch(new URL(path, PEY_API_URL), { headers: { Authorization: `Bearer ${PEY_API_KEY}` } });
+  const data: unknown = await response.json().catch(() => null);
+  if (!response.ok) throw new PeyError(response.status, data);
+  return data as T;
+}
+
+export async function isPaidOnPey(method: 'qr' | 'phone', peyRef: string): Promise<boolean> {
+  if (peyMock || !PEY_API_KEY) return false;
+  if (method === 'qr') {
+    const data = await read<{ items?: PeyTransaction[] }>(`/transaction/codi/qr/${encodeURIComponent(peyRef)}`);
+    return (data.items ?? []).some((transaction) => transaction.status === 'PAID');
+  }
+  const transaction = await read<PeyTransaction>(`/transaction/${encodeURIComponent(peyRef)}`);
+  return transaction.status === 'PAID';
+}

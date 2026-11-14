@@ -1,7 +1,10 @@
 import QRCode from 'qrcode';
+import { PEY_CHARGE_CAP } from 'astro:env/server';
 import { CHARGE_TTL_SECONDS, type Charge, type ChargeMethod } from './charge';
 import { createPush, createQr } from './pey';
 import { getStore } from './store';
+
+export const chargeCap: number | null = PEY_CHARGE_CAP && PEY_CHARGE_CAP > 0 ? PEY_CHARGE_CAP : null;
 
 export interface NewChargeInput {
   amount: number;
@@ -31,10 +34,12 @@ export function parseNewCharge(body: unknown): NewChargeInput {
 
 export async function createCharge(input: NewChargeInput, vendorId: string): Promise<Charge> {
   const now = Date.now();
+  const chargedAmount = chargeCap === null ? input.amount : Math.min(input.amount, chargeCap);
   const base = {
     id: crypto.randomUUID(),
     vendorId,
     amount: input.amount,
+    chargedAmount,
     concept: input.concept,
     method: input.method,
     status: 'waiting' as const,
@@ -44,12 +49,12 @@ export async function createCharge(input: NewChargeInput, vendorId: string): Pro
   const concept = input.concept || 'Cobro DeUna';
   let charge: Charge;
   if (input.method === 'qr') {
-    const qr = await createQr({ amount: input.amount, concept, expiration: CHARGE_TTL_SECONDS });
+    const qr = await createQr({ amount: chargedAmount, concept, expiration: CHARGE_TTL_SECONDS });
     const qrSvg = await QRCode.toString(qr.qrString, { type: 'svg', margin: 0, color: { dark: '#212529', light: '#ffffff' } });
     charge = { ...base, peyRef: qr.id, qrSvg };
   } else {
     const push = await createPush({
-      amount: input.amount,
+      amount: chargedAmount,
       phoneNumber: input.phoneNumber!,
       concept,
       expiration: CHARGE_TTL_SECONDS,

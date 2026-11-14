@@ -18,6 +18,7 @@ export default defineConfig({
       PEY_WEBHOOK_SECRET: envField.string({ context: 'server', access: 'secret', optional: true }),
       PEY_BANK_ACCOUNT_ID: envField.string({ context: 'server', access: 'secret', optional: true }),
       PEY_MOCK: envField.boolean({ context: 'server', access: 'secret', default: false }),
+      PEY_CHARGE_CAP: envField.number({ context: 'server', access: 'secret', optional: true }),
       FIREBASE_SERVICE_ACCOUNT: envField.string({ context: 'server', access: 'secret', optional: true }),
       PUBLIC_FIREBASE_API_KEY: envField.string({ context: 'client', access: 'public' }),
       PUBLIC_FIREBASE_AUTH_DOMAIN: envField.string({ context: 'client', access: 'public' }),
