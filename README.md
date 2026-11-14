@@ -123,4 +123,4 @@ Proyecto hecho para el Cursor Hackatón México 2026 por Santiago García Arella
 
 ## Licencia
 
-Pendiente de definir.
+[GNU Affero General Public License v3.0](LICENSE) (AGPL-3.0).
