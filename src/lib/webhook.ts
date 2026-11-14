@@ -3,7 +3,7 @@ import { PEY_WEBHOOK_SECRET } from 'astro:env/server';
 
 export interface PeyEvent {
   type: string;
-  data: Record<string, unknown>;
+  [field: string]: unknown;
 }
 
 export function verifyPeyEvent(payload: string, headers: Headers): PeyEvent {
@@ -17,8 +17,8 @@ export function verifyPeyEvent(payload: string, headers: Headers): PeyEvent {
 }
 
 export function peyRefFromEvent(event: PeyEvent): string | null {
-  const data = event.data;
-  const candidates = [data['codiQrId'], data['transactionId']];
+  const nested = typeof event['data'] === 'object' && event['data'] !== null ? (event['data'] as Record<string, unknown>) : {};
+  const candidates = [event['codiQrId'], event['transactionId'], nested['codiQrId'], nested['transactionId']];
   const found = candidates.find((value): value is string => typeof value === 'string' && value.length > 0);
   return found ?? null;
 }
