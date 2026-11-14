@@ -4,7 +4,7 @@ Cómo se trabaja en este repo.
 
 ## Stack
 - Astro 7 en modo servidor con `@astrojs/vercel`, islas de Svelte 5 (runas) y Tailwind v4.
-- Firebase Auth (Google y link por correo) y Firestore, en plan Spark. Sin Functions por ahora.
+- Firebase Auth con Google (cookie de sesión `deuna_session`, HttpOnly) y Firestore, en plan Spark. Sin Functions por ahora.
 - TypeScript estricto y pnpm. Nada de npm ni de JavaScript.
 
 ## Capas
@@ -12,7 +12,7 @@ Cómo se trabaja en este repo.
 - `src/layouts`: esqueleto de página con la meta de cada ruta.
 - `src/templates`: composición de un tipo de página.
 - `src/components`: piezas de UI sin acceso a datos.
-- `src/lib`: lógica. `pey.ts` (cliente de la API), `webhook.ts` (firma Standard Webhooks), `firebase/admin.ts` (solo servidor) y `firebase/client.ts` (navegador).
+- `src/lib`: lógica. `pey.ts` (cliente de la API y consulta de pago), `charges.ts` (crear cobros y tope), `webhook.ts` (firma Standard Webhooks), `session.ts` (sesión), `register.svelte.ts` (catálogo en el navegador), `firebase/admin.ts` (solo servidor) y `firebase/client.ts` (navegador).
 - `src/styles/global.css`: los tokens viven en `@theme` y no se repiten.
 
 ## Seguridad
@@ -23,7 +23,28 @@ Cómo se trabaja en este repo.
 ## Variables
 Ver `.env.example`. Los secretos van en `.env` (ignorado) y en las variables de entorno de Vercel.
 
+- `PEY_MOCK=true`: modo de prueba con «Simular pago». Sin llave y sin `PEY_MOCK`, crear un cobro responde 503.
+- `PEY_CHARGE_CAP`: tope de lo que se manda a pey. En producción vale `0.01` mientras dure la demo, porque la llave va ligada a la CLABE de prueba de pey y lo que se paga ahí no se devuelve. Con tope, Cobrar muestra la ventana «Cobros de prueba» y la línea «Cobro real de esta venta».
+- `PEY_BANK_ACCOUNT_ID` es opcional: la llave ya va ligada a una cuenta CoDi.
+- Para cargar secretos, el owner corre un script con entrada oculta en otro pane: `~/personal/handoffs/2026-11-14-deuna-pey/save-pey-secrets.ts` (llave) y `save-webhook-secret.ts` (secreto del webhook). Nunca se pegan en el chat.
+
+## pey
+- Los webhooks llegan planos: `codiQrId` y `transactionId` vienen en el primer nivel, no dentro de `data`.
+- El webhook se registra en el portal de pey: Desarrollador → engrane de la llave → «Crear Secreto de Webhook», con `https://deuna.cattion.com/api/webhooks/pey`. Abrir esa URL en el navegador da 404 porque solo acepta POST.
+- Respaldo: mientras un cobro espera, `GET /api/charges/[id]` le pregunta a pey si ya se pagó (`/transaction/codi/qr/{IDC}` o `/transaction/{transactionId}`).
+- Se prueba en producción con $0.01; pey todavía no tiene un entorno de pruebas propio.
+
 ## Comandos
 - `pnpm dev`: servidor local en el puerto 4400.
 - `pnpm build` y `pnpm check`.
 - `firebase deploy --only firestore:rules`: publica las reglas.
+
+## Despliegue
+- Vercel no está conectado a git. Después del merge, y solo con orden del owner: `vercel deploy --prod --yes` desde `main`.
+- Para probar producción sin tocar el dominio: `vercel deploy --prod --skip-domain`, más `vercel curl <ruta> --deployment <url> -- <args de curl>`, que salta la protección. Los errores se leen con `vercel logs <url> --json`.
+- El login se prueba en producción, no solo en el VPS: el runtime de Vercel no permite `require()` de módulos ESM.
+- No se quita el override `jwks-rsa: ^3.2.2` de `pnpm-workspace.yaml`. jwks-rsa 4 carga jose 6 (solo ESM) y en Vercel rompe el login con `ERR_REQUIRE_ESM`. Node va fijo en 24.x, igual que el VPS.
+
+## Decisiones del owner
+- 14-nov-2026: ningún texto público nombra a Mercado Pago; se dice «una app de cobro popular».
+- 14-nov-2026: la licencia es solo AGPL-3.0, sin MIT.
