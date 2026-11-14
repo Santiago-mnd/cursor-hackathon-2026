@@ -1,6 +1,6 @@
 ![DeUna · Cobra DeUna. Sigue vendiendo. · Cursor Hackatón México 2026](docs/assets/banner.png)
 
-# DeUna: cobros con CoDi y sin comisión para el comercio informal
+# DeUna: cobros con CoDi y sin comisión para el comercio popular
 
 DeUna permite cobrar desde el celular con CoDi: el dinero llega directo a la cuenta bancaria del comercio, sin comisión por cobro. Está [en vivo](https://deuna.cattion.com) y ya cobra de verdad con pey; para la demostración, cada cobro real se limita a $0.01 y la venta completa se registra en Cobros.
 
