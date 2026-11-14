@@ -5,4 +5,9 @@ interface Props {
 const { class: className = '' } = Astro.props;
 ---
 
-<span class={`font-bold tracking-tight ${className}`}>DeUna<span class="text-brand">.</span></span>
+<span class={`font-bold tracking-tight ${className}`}
+  >DeUna<span
+    class="mr-[0.02em] ml-[0.045em] inline-block size-[0.224em] rounded-full bg-brand align-[-0.005em]"
+    aria-hidden="true"></span
+  ><span class="sr-only">.</span></span
+>
