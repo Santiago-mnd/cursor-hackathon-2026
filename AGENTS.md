@@ -48,3 +48,4 @@ Ver `.env.example`. Los secretos van en `.env` (ignorado) y en las variables de 
 ## Decisiones del owner
 - 14-nov-2026: ningún texto público nombra a Mercado Pago; se dice «una app de cobro popular».
 - 14-nov-2026: la licencia es solo AGPL-3.0, sin MIT.
+- 14-nov-2026: en textos públicos se dice «comercio popular», no «comercio informal». Los datos del INEGI sobre informalidad se citan con sus propios términos.
