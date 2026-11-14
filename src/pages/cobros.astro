@@ -1,0 +1,18 @@
+---
+import AppLayout from '../layouts/AppLayout.astro';
+import ChargeList from '../components/ChargeList.astro';
+import DaySummary from '../components/DaySummary.astro';
+import { startOfTodayMx } from '../lib/charge';
+import { getStore } from '../lib/store';
+
+const store = await getStore();
+const charges = await store.listSince(startOfTodayMx());
+---
+
+<AppLayout title="Cobros · DeUna" description="Lo que cobraste hoy con DeUna." section="history">
+  <div class="mx-auto flex max-w-2xl flex-col gap-4 px-5 pt-6 pb-24 md:px-8 md:pb-8">
+    <h1 class="text-2xl font-bold">Tus cobros</h1>
+    <DaySummary charges={charges} />
+    <ChargeList charges={charges} />
+  </div>
+</AppLayout>

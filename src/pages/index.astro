@@ -1,15 +1,114 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Wordmark from '../components/Wordmark.astro';
+
+const steps = [
+  'Abre DeUna en el navegador; no tienes que descargar nada.',
+  'Muestra un QR o manda el cobro al celular de tu cliente.',
+  'Cuando pague, la pantalla cambia sola a «¡Pagado!». Lo sabes al momento.',
+];
+
+const benefits = [
+  { title: 'Te queda completo.', body: 'CoDi mueve el dinero de banco a banco; DeUna no cobra comisión por cada cobro.' },
+  { title: 'Cobras como te convenga.', body: 'Usa el QR en tu puesto o manda el cobro al celular cuando vendas a distancia.' },
+  { title: 'Ves cómo te fue.', body: 'Consulta cuánto cobraste y cuántos cobros recibiste.' },
+];
 ---
 
 <BaseLayout
-  title="Cobra sin comisión"
-  description="Cobros con CoDi para el comercio informal: QR en persona, cobro al celular a distancia y sin comisión."
+  title="DeUna · Cobra completo, aunque no traigan efectivo"
+  description="Cobra desde tu celular con CoDi. El dinero llega directo a tu cuenta bancaria, sin comisión por cobro."
 >
-  <main class="mx-auto max-w-md px-4 py-12">
-    <h1 class="text-4xl font-bold">Cobra sin comisión</h1>
-    <p class="mt-4 text-muted">
-      Cobros con CoDi para tu puesto: QR en persona y cobro al celular a distancia.
-    </p>
+  <header class="mx-auto flex max-w-5xl items-center justify-between px-5 py-5 md:px-8">
+    <Wordmark class="text-2xl" />
+    <a href="/cobrar" class="text-sm font-medium underline underline-offset-4">Empieza a cobrar</a>
+  </header>
+
+  <main>
+    <section class="bg-brand text-brand-ink">
+      <div class="mx-auto grid max-w-5xl gap-6 px-5 py-12 md:grid-cols-[3fr_2fr] md:items-end md:px-8 md:py-20">
+        <div class="grid gap-5">
+          <p class="num text-sm tracking-wider uppercase">Cobra de una. Sigue vendiendo.</p>
+          <h1 class="text-5xl leading-[1.02] font-bold tracking-tight text-balance md:text-7xl">
+            Cobra completo, aunque no traigan efectivo
+          </h1>
+          <p class="max-w-[46ch] text-lg leading-snug">
+            Con DeUna cobras desde tu celular con CoDi. El dinero llega directo a tu cuenta bancaria, sin comisión por cobro.
+          </p>
+          <a
+            href="/cobrar"
+            class="inline-flex h-14 w-full items-center justify-center rounded-[var(--radius-control)] bg-paper px-6 text-lg font-bold text-ink sm:w-auto sm:justify-self-start"
+          >
+            Empieza a cobrar
+          </a>
+        </div>
+        <figure class="grid gap-3 rounded-[var(--radius-card)] bg-paper p-5 text-ink">
+          <figcaption class="num text-xs tracking-wider text-ink-soft uppercase">Cobro real de $5 · 14 nov 2026</figcaption>
+          <div class="grid grid-cols-[1fr_auto] gap-y-1.5 text-base">
+            <span>Mercado Pago</span><span class="num">$5.00</span>
+            <span class="text-ink-soft">Cargo</span><span class="num text-fail-ink">−$4.84</span>
+            <span class="font-bold">Te quedan</span><span class="num font-bold">$0.16</span>
+          </div>
+          <div class="grid grid-cols-[1fr_auto] items-center gap-y-1.5 rounded-xl bg-paid px-3 py-2.5 text-base">
+            <span class="font-bold">Con DeUna te quedan</span><span class="num font-bold">$5.00</span>
+          </div>
+        </figure>
+      </div>
+    </section>
+
+    <section class="mx-auto grid max-w-5xl gap-6 px-5 py-14 md:px-8">
+      <h2 class="text-3xl font-bold">Así funciona</h2>
+      <ol class="grid gap-4 md:grid-cols-3">
+        {
+          steps.map((step, index) => (
+            <li class="grid gap-2 border-t border-ink pt-4">
+              <span class="num text-sm text-ink-soft">Paso {index + 1}</span>
+              <p class="text-lg leading-snug">{step}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="bg-stage">
+      <div class="mx-auto grid max-w-5xl gap-6 px-5 py-14 md:px-8">
+        <h2 class="text-3xl font-bold">Lo que ganas</h2>
+        <div class="grid gap-4 md:grid-cols-3">
+          {
+            benefits.map((benefit) => (
+              <div class="grid content-start gap-2">
+                <h3 class="text-xl font-bold">{benefit.title}</h3>
+                <p class="leading-snug text-ink-soft">{benefit.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="mx-auto grid max-w-5xl gap-4 px-5 py-14 md:px-8">
+      <h2 class="text-3xl font-bold">Preguntas frecuentes</h2>
+      <div class="grid gap-1">
+        <h3 class="text-lg font-bold">¿Necesito descargar una app?</h3>
+        <p class="text-ink-soft">No. Abre DeUna en el navegador de tu celular; si quieres, agrégala a tu pantalla de inicio.</p>
+      </div>
+    </section>
+
+    <section class="mx-auto grid max-w-5xl justify-items-start gap-4 px-5 pb-20 md:px-8">
+      <p class="text-3xl font-bold text-balance">Cobra de una. Sigue vendiendo.</p>
+      <a
+        href="/cobrar"
+        class="inline-flex h-14 w-full items-center justify-center rounded-[var(--radius-control)] bg-brand px-6 text-lg font-bold text-brand-ink sm:w-auto"
+      >
+        Empieza a cobrar
+      </a>
+    </section>
   </main>
+
+  <footer class="border-t border-line">
+    <div class="mx-auto flex max-w-5xl flex-wrap justify-between gap-2 px-5 py-6 text-sm text-ink-soft md:px-8">
+      <Wordmark />
+      <span>Hecho en el Cursor Hackatón México CDMX · noviembre 2026 · con CoDi y pey</span>
+    </div>
+  </footer>
 </BaseLayout>

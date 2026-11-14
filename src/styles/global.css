@@ -1,22 +1,67 @@
 @import "tailwindcss";
 
 @theme {
-  --color-ink: #16130f;
-  --color-paper: #faf6ee;
-  --color-accent: #e4572e;
-  --color-success: #2e9e5b;
-  --color-muted: #6f675c;
+  --color-paper: #ffffff;
+  --color-ink: #212529;
+  --color-ink-soft: #6d6d6d;
+  --color-line: #e3e3e3;
+  --color-stage: #f3f1ee;
+  --color-brand: #e4007c;
+  --color-brand-ink: #ffffff;
+  --color-paid: #9ee7a1;
+  --color-paid-ink: #1a7f45;
+  --color-wait: #ffe680;
+  --color-wait-ink: #8a5a00;
+  --color-fail: #ffd6d1;
+  --color-fail-ink: #c4271c;
+  --color-off: #ededed;
 
-  --font-sans: "Inter", system-ui, sans-serif;
+  --font-sans: "Familjen Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "DM Mono", ui-monospace, Menlo, monospace;
 
-  --radius-card: 1.25rem;
+  --radius-control: 14px;
+  --radius-card: 16px;
 
   --ease-snap: cubic-bezier(0.2, 0.8, 0.2, 1);
-  --duration-paid: 400ms;
 }
 
 @layer base {
+  html,
   body {
     @apply bg-paper text-ink font-sans antialiased;
   }
+  button {
+    cursor: pointer;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+}
+
+@utility num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes pop {
+  0% { transform: scale(0.4); }
+  60% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+@keyframes ring {
+  0% { transform: scale(1); opacity: 0.9; }
+  100% { transform: scale(3.2); opacity: 0; }
+}
+@keyframes rise {
+  0% { transform: translateY(8px); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translateY(-28px); opacity: 0; }
+}
+@keyframes pulse-dot {
+  50% { opacity: 0.25; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
 }

@@ -1,9 +1,10 @@
 import type { APIRoute } from 'astro';
-import { FieldValue } from 'firebase-admin/firestore';
-import { db } from '../../../lib/firebase/admin';
-import { verifyPeyEvent, type PeyEvent } from '../../../lib/webhook';
+import { getStore } from '../../../lib/store';
+import { peyRefFromEvent, verifyPeyEvent, type PeyEvent } from '../../../lib/webhook';
 
 export const prerender = false;
+
+const PAID_EVENTS = new Set(['codi.qr.payment_received', 'codi.pn.payment_received']);
 
 export const POST: APIRoute = async ({ request }) => {
   const payload = await request.text();
@@ -16,11 +17,15 @@ export const POST: APIRoute = async ({ request }) => {
   }
   if (!webhookId) return new Response('falta webhook-id', { status: 400 });
 
-  const eventRef = db.collection('webhookEvents').doc(webhookId);
-  const created = await eventRef
-    .create({ type: event.type, data: event.data, receivedAt: FieldValue.serverTimestamp() })
-    .then(() => true)
-    .catch(() => false);
+  const store = await getStore();
+  const isNew = await store.recordEvent(webhookId, event);
+  if (!isNew) return new Response('duplicado', { status: 200 });
 
-  return new Response(created ? 'ok' : 'duplicado', { status: 200 });
+  if (PAID_EVENTS.has(event.type)) {
+    const peyRef = peyRefFromEvent(event);
+    const charge = peyRef ? await store.findByPeyRef(peyRef) : null;
+    if (charge) await store.markPaid(charge.id, Date.now());
+    else console.warn('webhook sin cobro', event.type, peyRef);
+  }
+  return new Response('ok', { status: 200 });
 };

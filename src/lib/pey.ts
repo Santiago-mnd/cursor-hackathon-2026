@@ -7,7 +7,6 @@ export interface CreateQrInput {
   concept?: string;
   expiration?: number;
   numRef?: string;
-  generateImage?: boolean;
   bankAccountId?: string;
   metadata?: Metadata;
 }
@@ -15,7 +14,6 @@ export interface CreateQrInput {
 export interface CreateQrResult {
   id: string;
   qrString: string;
-  qrImage?: string | null;
 }
 
 export interface CreatePushInput {
@@ -42,6 +40,8 @@ export class PeyError extends Error {
   }
 }
 
+export const peyMock = !PEY_API_KEY;
+
 async function request<T>(path: string, body: unknown): Promise<T> {
   const response = await fetch(new URL(path, PEY_API_URL), {
     method: 'POST',
@@ -56,10 +56,17 @@ async function request<T>(path: string, body: unknown): Promise<T> {
   return data as T;
 }
 
-export function createQr(input: CreateQrInput): Promise<CreateQrResult> {
+export async function createQr(input: CreateQrInput): Promise<CreateQrResult> {
+  if (peyMock) {
+    const id = `MOCK${Date.now().toString(36).toUpperCase()}`;
+    return { id, qrString: JSON.stringify({ TYP: 1, v: '01', ic: 0, IDC: id, mock: true }) };
+  }
   return request('/codi/qr', input);
 }
 
-export function createPush(input: CreatePushInput): Promise<CreatePushResult> {
+export async function createPush(input: CreatePushInput): Promise<CreatePushResult> {
+  if (peyMock) {
+    return { transactionId: `MOCK${Date.now().toString(36).toUpperCase()}`, codiId: '0' };
+  }
   return request('/codi/pn', input);
 }
