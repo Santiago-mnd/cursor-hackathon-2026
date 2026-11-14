@@ -70,7 +70,11 @@ Para cobrar, DeUna integra [CoDi](https://expansion.mx/economia/2023/07/18/codi-
 - Catálogo en Cobrar: productos con precio, controles para sumar o restar, extras como «con queso +$5» y monto libre; el total se calcula automáticamente.
 - Logo, íconos y *manifest* para instalar DeUna en el celular.
 - Inicio de sesión con Google y una pestaña «Cuenta».
-- Cobros reales con pey, con el dinero directo en la cuenta CLABE del vendedor. Para la demostración, cada cobro real se limita a $0.01; la pantalla lo avisa y la venta completa se sigue viendo en Cobros.
+- Cobros reales con pey. En la demostración, todos los cobros llegan a una cuenta de prueba de pey y cada uno se limita a $0.01; la pantalla lo avisa y la venta completa se sigue viendo en Cobros.
+
+**Lo que sigue:**
+
+- Que cada vendedor registre su propia cuenta CLABE para recibir sus cobros directo. pey lo permite, pero la activación de una cuenta nueva tarda hasta cinco días hábiles.
 
 ## Cómo está hecho
 
