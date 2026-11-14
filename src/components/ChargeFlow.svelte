@@ -161,7 +161,7 @@
         disabled={!canCharge}
         onclick={() => create('qr')}
       >
-        {busy ? 'Creando…' : 'Mostrar QR'}
+        {busy ? 'Creando cobro…' : 'Mostrar QR'}
       </button>
       <button
         type="button"
@@ -183,7 +183,7 @@
   >
     {#if panel === 'idle'}
       <div class="m-auto max-w-xs px-6 text-center text-ink-soft">
-        <p class="text-lg">Escribe el monto y elige cómo cobrar.</p>
+        <p class="text-lg">Crea un cobro para verlo aquí.</p>
       </div>
     {:else if panel === 'phone'}
       <form
@@ -193,7 +193,7 @@
           create('phone');
         }}
       >
-        <button type="button" class="self-start text-sm text-ink-soft" onclick={() => (panel = 'idle')}>← Monto</button>
+        <button type="button" class="self-start text-sm text-ink-soft" onclick={() => (panel = 'idle')}>← Volver al monto</button>
         <p class="num text-4xl tracking-tight">{money.format(amount)}</p>
         <label for="phone" class="text-lg font-bold">Celular del cliente</label>
         <input
@@ -213,7 +213,7 @@
           class="mt-auto h-14 rounded-[var(--radius-control)] bg-brand text-lg font-bold text-brand-ink disabled:opacity-40"
           disabled={phone.replace(/\D/g, '').length !== 10 || busy}
         >
-          {busy ? 'Enviando…' : 'Envía el cobro'}
+          {busy ? 'Enviando cobro…' : 'Envía el cobro'}
         </button>
       </form>
     {:else if status === 'paid' && charge}
@@ -232,7 +232,7 @@
           class="mt-auto h-14 w-full max-w-sm rounded-[var(--radius-control)] bg-ink text-lg font-bold text-paper"
           onclick={reset}
         >
-          Nuevo cobro
+          Hacer otro cobro
         </button>
       </div>
     {:else if status === 'expired' || status === 'failed'}
@@ -242,7 +242,7 @@
           class:bg-off={status === 'expired'}
           class:bg-fail={status === 'failed'}
         >
-          {status === 'expired' ? 'Expiró' : 'Falló'}
+          {status === 'expired' ? 'Vencido' : 'Falló'}
         </span>
         <p class="text-2xl font-bold">{status === 'expired' ? 'Se venció el cobro' : 'No se pudo cobrar'}</p>
         {#if status === 'failed' && errorMessage}<p class="text-ink-soft">{errorMessage}</p>{/if}
@@ -254,13 +254,13 @@
           >
             {status === 'expired' ? 'Cobra de nuevo' : 'Intenta de nuevo'}
           </button>
-          <button type="button" class="h-12 text-ink-soft" onclick={reset}>Nuevo cobro</button>
+          <button type="button" class="h-12 text-ink-soft" onclick={reset}>Hacer otro cobro</button>
         </div>
       </div>
     {:else if charge}
       <div class="flex flex-1 flex-col items-center gap-4 px-5 pt-6 pb-4 text-center">
         <div class="flex w-full items-center justify-between">
-          <button type="button" class="text-sm text-ink-soft" onclick={reset}>Cancelar</button>
+          <button type="button" class="text-sm text-ink-soft" onclick={reset}>Cancelar cobro</button>
           <span class="inline-flex items-center gap-2 rounded-full bg-wait px-3 py-1.5 text-[13px] font-medium">
             <span class="size-2.5 rounded-full bg-wait-ink [animation:pulse-dot_1.4s_ease-in-out_infinite]"></span>
             Esperando pago
@@ -274,7 +274,7 @@
           <p class="text-ink-soft">Pide que escaneen el QR</p>
         {:else}
           <p class="num mt-10 text-[44px] tracking-tight">{money.format(charge.amount)}</p>
-          <p class="text-ink-soft">Cobro enviado al celular •••• {charge.phoneLast4}</p>
+          <p class="text-ink-soft">Cobro enviado a •••• {charge.phoneLast4}</p>
         {/if}
         <p class="num text-[15px] text-wait-ink">Vence en {countdown}</p>
         {#if mock}
@@ -283,7 +283,7 @@
             class="mt-auto rounded-[var(--radius-control)] border border-dashed border-ink-soft px-4 py-2.5 text-sm text-ink-soft"
             onclick={simulatePaid}
           >
-            Modo de prueba: simular pago
+            Simular pago
           </button>
         {/if}
       </div>

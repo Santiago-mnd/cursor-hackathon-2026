@@ -13,9 +13,9 @@ export const POST: APIRoute = async ({ request }) => {
     if (error instanceof ChargeInputError) return Response.json({ error: error.message }, { status: 400 });
     if (error instanceof PeyError) {
       console.error('pey', error.status, error.body);
-      return Response.json({ error: 'No se pudo crear el cobro. Intenta de nuevo.' }, { status: 502 });
+      return Response.json({ error: 'No se pudo crear el cobro.' }, { status: 502 });
     }
     console.error(error);
-    return Response.json({ error: 'No se pudo crear el cobro. Intenta de nuevo.' }, { status: 500 });
+    return Response.json({ error: 'No se pudo crear el cobro.' }, { status: 500 });
   }
 };

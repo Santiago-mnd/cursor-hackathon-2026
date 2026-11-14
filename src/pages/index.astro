@@ -2,17 +2,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Wordmark from '../components/Wordmark.astro';
 
-const steps = [
-  'Abre DeUna en el navegador; no tienes que descargar nada.',
-  'Muestra un QR o manda el cobro al celular de tu cliente.',
-  'Cuando pague, la pantalla cambia sola a «¡Pagado!». Lo sabes al momento.',
-];
-
-const benefits = [
-  { title: 'Te queda completo.', body: 'CoDi mueve el dinero de banco a banco; DeUna no cobra comisión por cada cobro.' },
-  { title: 'Cobras como te convenga.', body: 'Usa el QR en tu puesto o manda el cobro al celular cuando vendas a distancia.' },
-  { title: 'Ves cómo te fue.', body: 'Consulta cuánto cobraste y cuántos cobros recibiste.' },
-];
 ---
 
 <BaseLayout
@@ -43,46 +32,34 @@ const benefits = [
           </a>
         </div>
         <figure class="grid gap-3 rounded-[var(--radius-card)] bg-paper p-5 text-ink">
-          <figcaption class="num text-xs tracking-wider text-ink-soft uppercase">Cobro real de $5 · 14 nov 2026</figcaption>
+          <figcaption class="num text-xs tracking-wider text-ink-soft uppercase">Cobro de $5 · 14 de noviembre de 2026</figcaption>
           <div class="grid grid-cols-[1fr_auto] gap-y-1.5 text-base">
-            <span>Mercado Pago</span><span class="num">$5.00</span>
-            <span class="text-ink-soft">Cargo</span><span class="num text-fail-ink">−$4.84</span>
-            <span class="font-bold">Te quedan</span><span class="num font-bold">$0.16</span>
+            <span class="text-ink-soft">Cargo de Mercado Pago</span><span class="num text-fail-ink">−$4.84</span>
+            <span class="font-bold">Le quedaron</span><span class="num font-bold">$0.16</span>
           </div>
           <div class="grid grid-cols-[1fr_auto] items-center gap-y-1.5 rounded-xl bg-paid px-3 py-2.5 text-base">
-            <span class="font-bold">Con DeUna te quedan</span><span class="num font-bold">$5.00</span>
+            <span class="font-bold">Con DeUna le quedan</span><span class="num font-bold">$5.00</span>
           </div>
         </figure>
       </div>
     </section>
 
-    <section class="mx-auto grid max-w-5xl gap-6 px-5 py-14 md:px-8">
-      <h2 class="text-3xl font-bold">Así funciona</h2>
-      <ol class="grid gap-4 md:grid-cols-3">
-        {
-          steps.map((step, index) => (
-            <li class="grid gap-2 border-t border-ink pt-4">
-              <span class="num text-sm text-ink-soft">Paso {index + 1}</span>
-              <p class="text-lg leading-snug">{step}</p>
-            </li>
-          ))
-        }
-      </ol>
+    <section class="mx-auto grid max-w-5xl gap-4 px-5 py-14 md:px-8">
+      <h2 class="text-3xl font-bold">Cobrar desde tu celular</h2>
+      <p class="max-w-[60ch] text-lg leading-snug">
+        Abre DeUna en el navegador; no tienes que descargar nada. Si tienes al cliente enfrente, muéstrale el QR para que lo
+        escanee con la app de su banco. También puedes mandarle el cobro a su celular con su número de 10 dígitos. Cuando
+        pague, la pantalla cambia sola a «¡Pagado!».
+      </p>
     </section>
 
     <section class="bg-stage">
-      <div class="mx-auto grid max-w-5xl gap-6 px-5 py-14 md:px-8">
-        <h2 class="text-3xl font-bold">Lo que ganas</h2>
-        <div class="grid gap-4 md:grid-cols-3">
-          {
-            benefits.map((benefit) => (
-              <div class="grid content-start gap-2">
-                <h3 class="text-xl font-bold">{benefit.title}</h3>
-                <p class="leading-snug text-ink-soft">{benefit.body}</p>
-              </div>
-            ))
-          }
-        </div>
+      <div class="mx-auto grid max-w-5xl gap-4 px-5 py-14 md:px-8">
+        <h2 class="text-3xl font-bold">Tu venta a la vista</h2>
+        <p class="max-w-[60ch] text-lg leading-snug">
+          El dinero llega directo a tu cuenta, de banco a banco, por CoDi; DeUna no te cobra comisión por cobro. En Cobros ves
+          cuánto cobraste hoy, cuántos cobros hiciste y el estado de cada uno.
+        </p>
       </div>
     </section>
 
@@ -108,7 +85,7 @@ const benefits = [
   <footer class="border-t border-line">
     <div class="mx-auto flex max-w-5xl flex-wrap justify-between gap-2 px-5 py-6 text-sm text-ink-soft md:px-8">
       <Wordmark />
-      <span>Hecho en el Cursor Hackatón México CDMX · noviembre 2026 · con CoDi y pey</span>
+      <span>Hecho en Cursor Hackatón México CDMX, noviembre de 2026; con CoDi y la API de pey.</span>
     </div>
   </footer>
 </BaseLayout>

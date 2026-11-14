@@ -10,7 +10,7 @@ const { status } = Astro.props;
 const variants: Record<ChargeStatus, { label: string; bg: string; icon: string }> = {
   paid: { label: 'Pagado', bg: 'bg-paid', icon: 'M3 8.5l3 3 7-7' },
   waiting: { label: 'Esperando', bg: 'bg-wait', icon: 'M8 4.5V8l2.5 1.5M8 2a6 6 0 1 0 0 12A6 6 0 0 0 8 2z' },
-  expired: { label: 'Expiró', bg: 'bg-off', icon: 'M5 8h6M8 2a6 6 0 1 0 0 12A6 6 0 0 0 8 2z' },
+  expired: { label: 'Vencido', bg: 'bg-off', icon: 'M5 8h6M8 2a6 6 0 1 0 0 12A6 6 0 0 0 8 2z' },
   failed: { label: 'Falló', bg: 'bg-fail', icon: 'M4 4l8 8M12 4l-8 8' },
 };
 

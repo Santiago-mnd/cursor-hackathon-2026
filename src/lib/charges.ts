@@ -17,10 +17,10 @@ export function parseNewCharge(body: unknown): NewChargeInput {
   const raw = body as Record<string, unknown>;
   const amount = Math.round(Number(raw['amount']) * 100) / 100;
   if (!Number.isFinite(amount) || amount <= 0 || amount > 1_000_000) {
-    throw new ChargeInputError('Escribe un monto mayor a $0');
+    throw new ChargeInputError('Ingresa un monto mayor a cero.');
   }
   const method = raw['method'];
-  if (method !== 'qr' && method !== 'phone') throw new ChargeInputError('Elige cómo cobrar');
+  if (method !== 'qr' && method !== 'phone') throw new ChargeInputError('Elige cómo quieres cobrar.');
   const concept = typeof raw['concept'] === 'string' ? raw['concept'].trim().slice(0, 60) : '';
   const phoneNumber = typeof raw['phoneNumber'] === 'string' ? raw['phoneNumber'].replace(/\D/g, '') : undefined;
   if (method === 'phone' && (!phoneNumber || phoneNumber.length !== 10)) {
