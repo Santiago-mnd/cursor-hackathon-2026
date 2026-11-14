@@ -1,4 +1,8 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
+  import ProductPicker from './ProductPicker.svelte';
+  import { Register } from '../lib/register.svelte';
+
   type Method = 'qr' | 'phone';
   type Status = 'waiting' | 'paid' | 'expired' | 'failed';
   type Panel = 'idle' | 'phone' | 'status';
@@ -23,8 +27,13 @@
   let errorMessage = $state('');
   let busy = $state(false);
   let now = $state(Date.now());
+  let editingCatalog = $state(false);
 
-  const amount = $derived(Number(digits || '0'));
+  const register = new Register();
+  onMount(() => register.load());
+
+  const amount = $derived(register.mode === 'products' ? register.total : Number(digits || '0'));
+  const chargeConcept = $derived(register.mode === 'products' ? register.summary : concept);
   const canCharge = $derived(amount > 0 && !busy);
   const money = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' });
   const remaining = $derived(charge ? Math.max(0, Math.ceil((charge.expiresAt - now) / 1000)) : 0);
@@ -51,7 +60,7 @@
       const response = await fetch('/api/charges', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount, concept, method, phoneNumber: method === 'phone' ? phone : undefined }),
+        body: JSON.stringify({ amount, concept: chargeConcept, method, phoneNumber: method === 'phone' ? phone : undefined }),
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error ?? 'No se pudo cobrar');
@@ -84,6 +93,7 @@
     status = 'waiting';
     errorMessage = '';
     panel = 'idle';
+    register.clearSale();
   }
 
   function retry() {
@@ -126,35 +136,72 @@
 
 <div class="grid h-full min-h-0 md:grid-cols-2">
   <section
-    class="flex min-h-0 flex-col gap-4 px-5 pt-6 pb-4 md:border-r md:border-line md:px-8"
+    class="flex min-h-0 flex-col gap-4 px-5 pt-4 pb-4 md:border-r md:border-line md:px-8"
     class:max-md:hidden={panel !== 'idle'}
-    aria-label="Monto"
+    aria-label="Armar el cobro"
   >
-    <p class="text-center text-sm text-ink-soft">¿Cuánto vas a cobrar?</p>
-    <p class="num text-center text-[64px] leading-none tracking-tight" aria-live="polite">
-      <span class="align-[0.6em] text-[32px]">$</span>{digits || '0'}
-    </p>
-    <label class="sr-only" for="concept">Concepto (opcional)</label>
-    <input
-      id="concept"
-      bind:value={concept}
-      maxlength="60"
-      placeholder="Concepto (opcional)"
-      class="border-b border-line bg-transparent px-1 py-2.5 text-center text-base placeholder:text-ink-soft focus:border-ink focus:outline-none"
-    />
-    <div class="mt-auto grid grid-cols-3 gap-1.5">
-      {#each keys as key (key)}
-        <button
-          type="button"
-          class="num h-14 rounded-xl text-[26px] active:bg-off"
-          aria-label={key === 'back' ? 'Borrar' : key}
-          onclick={() => press(key)}
-        >
-          {key === 'back' ? '⌫' : key}
-        </button>
-      {/each}
+    <div class="grid grid-cols-2 rounded-xl bg-off p-1 text-sm font-medium" role="tablist" aria-label="Cómo armar el cobro">
+      <button
+        type="button"
+        role="tab"
+        class="rounded-lg py-2"
+        class:bg-paper={register.mode === 'products'}
+        class:text-ink-soft={register.mode !== 'products'}
+        aria-selected={register.mode === 'products'}
+        onclick={() => register.setMode('products')}
+      >
+        Productos
+      </button>
+      <button
+        type="button"
+        role="tab"
+        class="rounded-lg py-2"
+        class:bg-paper={register.mode === 'amount'}
+        class:text-ink-soft={register.mode !== 'amount'}
+        aria-selected={register.mode === 'amount'}
+        onclick={() => {
+          editingCatalog = false;
+          register.setMode('amount');
+        }}
+      >
+        Escribir monto
+      </button>
     </div>
-    <div class="grid gap-2">
+    {#if register.mode === 'products'}
+      <ProductPicker {register} bind:editing={editingCatalog} />
+      {#if !editingCatalog && register.products.length > 0}
+        <div class="flex items-baseline justify-between border-t border-ink pt-3">
+          <span class="text-lg font-bold">Total</span>
+          <span class="num text-[34px] leading-none tracking-tight" aria-live="polite">{money.format(amount)}</span>
+        </div>
+      {/if}
+    {:else}
+      <p class="text-center text-sm text-ink-soft">¿Cuánto vas a cobrar?</p>
+      <p class="num text-center text-[64px] leading-none tracking-tight" aria-live="polite">
+        <span class="align-[0.6em] text-[32px]">$</span>{digits || '0'}
+      </p>
+      <label class="sr-only" for="concept">Concepto (opcional)</label>
+      <input
+        id="concept"
+        bind:value={concept}
+        maxlength="60"
+        placeholder="Concepto (opcional)"
+        class="border-b border-line bg-transparent px-1 py-2.5 text-center text-base placeholder:text-ink-soft focus:border-ink focus:outline-none"
+      />
+      <div class="mt-auto grid grid-cols-3 gap-1.5">
+        {#each keys as key (key)}
+          <button
+            type="button"
+            class="num h-14 rounded-xl text-[26px] active:bg-off"
+            aria-label={key === 'back' ? 'Borrar' : key}
+            onclick={() => press(key)}
+          >
+            {key === 'back' ? '⌫' : key}
+          </button>
+        {/each}
+      </div>
+    {/if}
+    <div class="grid gap-2" class:hidden={editingCatalog && register.mode === 'products'}>
       <button
         type="button"
         class="h-14 rounded-[var(--radius-control)] bg-brand text-lg font-bold text-brand-ink disabled:opacity-40"
