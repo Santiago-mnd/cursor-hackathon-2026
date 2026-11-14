@@ -3,3 +3,6 @@ allowBuilds:
   protobufjs: false
   esbuild: true
   sharp: true
+
+overrides:
+  jwks-rsa: ^3.2.2
