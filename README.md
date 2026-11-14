@@ -2,7 +2,7 @@
 
 # DeUna: cobros con CoDi y sin comisión para el comercio informal
 
-DeUna permite cobrar desde el celular con CoDi: el dinero llega directo a la cuenta bancaria del comercio, sin comisión por cobro. Está [en vivo](https://deuna.cattion.com) en modo de prueba; mientras se cargan las llaves de pey, el botón «Simular pago» permite recorrer el flujo completo.
+DeUna permite cobrar desde el celular con CoDi: el dinero llega directo a la cuenta bancaria del comercio, sin comisión por cobro. Está [en vivo](https://deuna.cattion.com) y ya cobra de verdad con pey; para la demostración, cada cobro real se limita a $0.01 y la venta completa se registra en Cobros.
 
 ## El encuentro
 
@@ -70,10 +70,7 @@ Para cobrar, DeUna integra [CoDi](https://expansion.mx/economia/2023/07/18/codi-
 - Catálogo en Cobrar: productos con precio, controles para sumar o restar, extras como «con queso +$5» y monto libre; el total se calcula automáticamente.
 - Logo, íconos y *manifest* para instalar DeUna en el celular.
 - Inicio de sesión con Google y una pestaña «Cuenta».
-
-**Lo que sigue:**
-
-- Cobros reales con pey. Las cuentas CLABE ya están activas ante Banxico; el siguiente paso es probar cobros de $0.01 en producción.
+- Cobros reales con pey, con el dinero directo en la cuenta CLABE del vendedor. Para la demostración, cada cobro real se limita a $0.01; la pantalla lo avisa y la venta completa se sigue viendo en Cobros.
 
 ## Cómo está hecho
 
