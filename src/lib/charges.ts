@@ -29,10 +29,11 @@ export function parseNewCharge(body: unknown): NewChargeInput {
   return { amount, concept, method, phoneNumber };
 }
 
-export async function createCharge(input: NewChargeInput): Promise<Charge> {
+export async function createCharge(input: NewChargeInput, vendorId: string): Promise<Charge> {
   const now = Date.now();
   const base = {
     id: crypto.randomUUID(),
+    vendorId,
     amount: input.amount,
     concept: input.concept,
     method: input.method,

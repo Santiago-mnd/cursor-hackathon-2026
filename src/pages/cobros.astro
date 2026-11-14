@@ -6,7 +6,7 @@ import { startOfTodayMx } from '../lib/charge';
 import { getStore } from '../lib/store';
 
 const store = await getStore();
-const charges = await store.listSince(startOfTodayMx());
+const charges = await store.listSince(Astro.locals.user!.uid, startOfTodayMx());
 ---
 
 <AppLayout title="Cobros · DeUna" description="Consulta cuánto cobraste hoy y el estado de cada cobro." section="history">

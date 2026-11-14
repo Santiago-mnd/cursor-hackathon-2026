@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Wordmark from '../components/Wordmark.astro';
+import LoginButton from '../components/LoginButton.svelte';
+import { authEnabled, safeNext } from '../lib/session';
+
+const next = safeNext(Astro.url.searchParams.get('next'));
+if (Astro.locals.user && authEnabled) return Astro.redirect(next);
+---
+
+<BaseLayout title="Entrar · DeUna" description="Entra con Google para cobrar y ver tus cobros en DeUna.">
+  <main class="mx-auto flex min-h-dvh max-w-md flex-col px-5 py-6">
+    <a href="/" class="text-2xl"><Wordmark /></a>
+    <div class="my-auto grid gap-5 py-10">
+      <h1 class="text-5xl leading-[1.02] font-bold tracking-tight text-balance">Cobra <Wordmark /> Sigue vendiendo.</h1>
+      <p class="text-lg leading-snug text-ink-soft">Entra con Google para cobrar y ver tus cobros. Tus productos siguen guardados en tu celular.</p>
+      <LoginButton client:load next={next} />
+    </div>
+  </main>
+</BaseLayout>

@@ -7,7 +7,7 @@ export interface ChargeStore {
   get(id: string): Promise<Charge | null>;
   findByPeyRef(peyRef: string): Promise<Charge | null>;
   markPaid(id: string, paidAt: number): Promise<void>;
-  listSince(since: number): Promise<Charge[]>;
+  listSince(vendorId: string, since: number): Promise<Charge[]>;
   recordEvent(eventId: string, event: unknown): Promise<boolean>;
 }
 
@@ -32,9 +32,10 @@ class FirestoreStore implements ChargeStore {
     await this.db.collection('charges').doc(id).update({ status: 'paid', paidAt });
   }
 
-  async listSince(since: number) {
+  async listSince(vendorId: string, since: number) {
     const snap = await this.db
       .collection('charges')
+      .where('vendorId', '==', vendorId)
       .where('createdAt', '>=', since)
       .orderBy('createdAt', 'desc')
       .limit(100)
@@ -73,9 +74,9 @@ class MemoryStore implements ChargeStore {
     if (charge) this.charges.set(id, { ...charge, status: 'paid', paidAt });
   }
 
-  async listSince(since: number) {
+  async listSince(vendorId: string, since: number) {
     return [...this.charges.values()]
-      .filter((charge) => charge.createdAt >= since)
+      .filter((charge) => charge.vendorId === vendorId && charge.createdAt >= since)
       .sort((a, b) => b.createdAt - a.createdAt);
   }
 

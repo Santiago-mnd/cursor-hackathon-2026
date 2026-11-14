@@ -3,6 +3,7 @@ export type ChargeStatus = 'waiting' | 'paid' | 'expired' | 'failed';
 
 export interface Charge {
   id: string;
+  vendorId: string;
   amount: number;
   concept: string;
   method: ChargeMethod;

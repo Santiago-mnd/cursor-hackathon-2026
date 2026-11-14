@@ -2,6 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Wordmark from '../components/Wordmark.astro';
 
+const signedIn = Boolean(Astro.locals.user);
+
 const CHARGED = 5;
 const formatSigned = (value: number) => `${value < 0 ? '−' : ''}$${Math.abs(value).toFixed(2)}`;
 const percentOf = (value: number) => Math.round((value / CHARGED) * 100);
@@ -42,7 +44,12 @@ const receipts = [
 >
   <header class="mx-auto flex max-w-5xl items-center justify-between px-5 py-5 md:px-8">
     <Wordmark class="text-2xl" />
-    <a href="/cobrar" class="text-sm font-medium underline underline-offset-4">Haz tu primer cobro</a>
+    <a
+      href={signedIn ? '/cobrar' : '/entrar'}
+      class="inline-flex h-11 items-center rounded-[var(--radius-control)] border border-ink px-4 text-sm font-bold"
+    >
+      {signedIn ? 'Cobrar' : 'Entrar'}
+    </a>
   </header>
 
   <main>
