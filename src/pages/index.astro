@@ -10,13 +10,13 @@ import Wordmark from '../components/Wordmark.astro';
 >
   <header class="mx-auto flex max-w-5xl items-center justify-between px-5 py-5 md:px-8">
     <Wordmark class="text-2xl" />
-    <a href="/cobrar" class="text-sm font-medium underline underline-offset-4">Empieza a cobrar</a>
+    <a href="/cobrar" class="text-sm font-medium underline underline-offset-4">Haz tu primer cobro</a>
   </header>
 
   <main>
     <section class="bg-brand text-brand-ink">
-      <div class="mx-auto grid max-w-5xl gap-6 px-5 py-12 md:grid-cols-[3fr_2fr] md:items-end md:px-8 md:py-20">
-        <div class="grid gap-5">
+      <div class="mx-auto grid max-w-5xl gap-10 px-5 py-12 md:grid-cols-[1fr_minmax(0,280px)] md:items-stretch md:gap-12 md:px-8 md:py-20">
+        <div class="grid content-start gap-5">
           <p class="num text-sm tracking-wider uppercase">Cobra de una. Sigue vendiendo.</p>
           <h1 class="text-5xl leading-[1.02] font-bold tracking-tight text-balance md:text-7xl">
             Cobra completo, aunque no traigan efectivo
@@ -28,19 +28,36 @@ import Wordmark from '../components/Wordmark.astro';
             href="/cobrar"
             class="inline-flex h-14 w-full items-center justify-center rounded-[var(--radius-control)] bg-paper px-6 text-lg font-bold text-ink sm:w-auto sm:justify-self-start"
           >
-            Empieza a cobrar
+            Haz tu primer cobro
           </a>
         </div>
-        <figure class="grid gap-3 rounded-[var(--radius-card)] bg-paper p-5 text-ink">
-          <figcaption class="num text-xs tracking-wider text-ink-soft uppercase">Cobro de $5 · 14 de noviembre de 2026</figcaption>
-          <div class="grid grid-cols-[1fr_auto] gap-y-1.5 text-base">
+        <figure class="flex flex-col items-center gap-3 md:items-stretch">
+          <div class="w-full max-w-[280px] md:relative md:max-w-none md:flex-1">
+            <img
+              src="/comprobante-mercado-pago.jpg"
+              width="600"
+              height="1152"
+              alt="Comprobante real de Mercado Pago Wallet: cobro de $5, cargo de $4.84 y total recibido de $0.16. Los datos personales están tapados."
+              class="w-full rounded-[var(--radius-card)] bg-paper md:absolute md:inset-0 md:h-full md:object-cover md:object-top"
+            />
+          </div>
+          <figcaption class="text-center text-sm">Comprobante real de Mercado Pago; tapamos los datos personales.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="mx-auto grid max-w-5xl gap-8 px-5 py-14 md:px-8">
+      <div class="grid gap-5">
+        <h2 class="text-4xl leading-[1.05] font-bold tracking-tight text-balance md:text-5xl">Cobró $5; le quedaron $0.16</h2>
+        <div class="grid max-w-md gap-3">
+          <div class="grid grid-cols-[1fr_auto] gap-y-1.5 text-lg">
             <span class="text-ink-soft">Cargo de Mercado Pago</span><span class="num text-fail-ink">−$4.84</span>
             <span class="font-bold">Le quedaron</span><span class="num font-bold">$0.16</span>
           </div>
-          <div class="grid grid-cols-[1fr_auto] items-center gap-y-1.5 rounded-xl bg-paid px-3 py-2.5 text-base">
+          <div class="grid grid-cols-[1fr_auto] items-center rounded-xl bg-paid px-4 py-3 text-lg">
             <span class="font-bold">Con DeUna le quedan</span><span class="num font-bold">$5.00</span>
           </div>
-        </figure>
+        </div>
       </div>
     </section>
 
@@ -77,7 +94,7 @@ import Wordmark from '../components/Wordmark.astro';
         href="/cobrar"
         class="inline-flex h-14 w-full items-center justify-center rounded-[var(--radius-control)] bg-brand px-6 text-lg font-bold text-brand-ink sm:w-auto"
       >
-        Empieza a cobrar
+        Haz tu primer cobro
       </a>
     </section>
   </main>
