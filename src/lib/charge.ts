@@ -5,6 +5,7 @@ export interface Charge {
   id: string;
   vendorId: string;
   amount: number;
+  chargedAmount?: number;
   concept: string;
   method: ChargeMethod;
   status: ChargeStatus;

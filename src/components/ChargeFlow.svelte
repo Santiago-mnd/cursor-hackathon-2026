@@ -14,9 +14,12 @@
     expiresAt: number;
     qrSvg?: string;
     phoneLast4?: string;
+    chargedAmount?: number;
   }
 
-  let { mock = false }: { mock?: boolean } = $props();
+  const NOTICE_KEY = 'deuna.demo-notice.v1';
+
+  let { mock = false, cap = null }: { mock?: boolean; cap?: number | null } = $props();
 
   let digits = $state('');
   let concept = $state('');
@@ -28,9 +31,29 @@
   let busy = $state(false);
   let now = $state(Date.now());
   let editingCatalog = $state(false);
+  let notice = $state<HTMLDialogElement>();
 
   const register = new Register();
-  onMount(() => register.load());
+  onMount(() => {
+    register.load();
+    if (cap === null) return;
+    let seen = false;
+    try {
+      seen = localStorage.getItem(NOTICE_KEY) === '1';
+    } catch {
+      seen = false;
+    }
+    if (!seen) notice?.showModal();
+  });
+
+  function closeNotice() {
+    try {
+      localStorage.setItem(NOTICE_KEY, '1');
+    } catch {
+      /* sin almacenamiento: el aviso vuelve a salir la próxima vez */
+    }
+    notice?.close();
+  }
 
   const amount = $derived(register.mode === 'products' ? register.total : Number(digits || '0'));
   const chargeConcept = $derived(register.mode === 'products' ? register.summary : concept);
@@ -323,6 +346,11 @@
           <p class="num mt-10 text-[44px] tracking-tight">{money.format(charge.amount)}</p>
           <p class="text-ink-soft">Cobro enviado a •••• {charge.phoneLast4}</p>
         {/if}
+        {#if charge.chargedAmount !== undefined && charge.chargedAmount < charge.amount}
+          <p class="rounded-full bg-off px-3 py-1.5 text-sm">
+            Cobro real de esta venta: <strong class="num">{money.format(charge.chargedAmount)}</strong>
+          </p>
+        {/if}
         <p class="num text-[15px] text-wait-ink">Vence en {countdown}</p>
         {#if mock}
           <button
@@ -337,3 +365,20 @@
     {/if}
   </section>
 </div>
+
+{#if cap !== null}
+  <dialog
+    bind:this={notice}
+    aria-labelledby="demo-notice-title"
+    class="m-auto w-[min(92vw,26rem)] rounded-[var(--radius-card)] bg-paper p-6 text-ink backdrop:bg-ink/60"
+  >
+    <h2 id="demo-notice-title" class="text-2xl font-bold">Cobros de prueba</h2>
+    <p class="mt-3 text-base leading-relaxed">
+      Durante la demo, cobrarás <strong>{money.format(cap)} por venta</strong>, aunque el total sea mayor. Tu cliente paga ese centavo
+      desde su app bancaria y no se devuelve; DeUna conserva el total, los productos y el resumen del día.
+    </p>
+    <button type="button" class="mt-6 h-12 w-full rounded-[var(--radius-control)] bg-ink text-lg font-bold text-paper" onclick={closeNotice}>
+      Entendido
+    </button>
+  </dialog>
+{/if}

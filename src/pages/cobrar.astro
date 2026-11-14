@@ -5,6 +5,7 @@ import ChargeList from '../components/ChargeList.astro';
 import DaySummary from '../components/DaySummary.astro';
 import { startOfTodayMx } from '../lib/charge';
 import { peyMock } from '../lib/pey';
+import { chargeCap } from '../lib/charges';
 import { getStore } from '../lib/store';
 
 const store = await getStore();
@@ -13,7 +14,7 @@ const charges = await store.listSince(Astro.locals.user!.uid, startOfTodayMx());
 
 <AppLayout title="Cobrar · DeUna" description="Cobra con QR o envía el cobro al celular de tu cliente." section="charge">
   <div class="grid h-[calc(100dvh-64px)] md:h-dvh lg:grid-cols-[2fr_1fr]">
-    <ChargeFlow client:load mock={peyMock} />
+    <ChargeFlow client:load mock={peyMock} cap={chargeCap} />
     <aside class="hidden min-h-0 flex-col gap-4 overflow-auto border-l border-line px-6 py-6 lg:flex" aria-label="Cobros de hoy">
       <DaySummary charges={charges} />
       <ChargeList charges={charges.slice(0, 8)} />
