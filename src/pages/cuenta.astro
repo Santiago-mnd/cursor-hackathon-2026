@@ -1,0 +1,34 @@
+---
+import AppLayout from '../layouts/AppLayout.astro';
+import SignOutButton from '../components/SignOutButton.svelte';
+
+const user = Astro.locals.user!;
+---
+
+<AppLayout title="Tu cuenta · DeUna" description="Consulta tu nombre y correo de Google, o cierra sesión." section="account">
+  <div class="mx-auto flex max-w-2xl flex-col gap-6 px-5 pt-6 pb-24 md:px-8 md:pb-8">
+    <h1 class="text-2xl font-bold">Tu cuenta</h1>
+    <div>
+      {
+        user.picture ? (
+          <img src={user.picture} alt="" width="64" height="64" referrerpolicy="no-referrer" class="size-16 rounded-full bg-off" />
+        ) : (
+          <span class="grid size-16 place-items-center rounded-full bg-ink text-2xl font-bold text-paper" aria-hidden="true">
+            {(user.name || user.email || '?').charAt(0).toUpperCase()}
+          </span>
+        )
+      }
+    </div>
+    <dl class="grid gap-3 rounded-[var(--radius-card)] border border-line p-5">
+      <div class="grid gap-0.5">
+        <dt class="text-sm text-ink-soft">Nombre</dt>
+        <dd class="text-lg">{user.name || '—'}</dd>
+      </div>
+      <div class="grid gap-0.5">
+        <dt class="text-sm text-ink-soft">Correo de Google</dt>
+        <dd class="text-lg break-all">{user.email || '—'}</dd>
+      </div>
+    </dl>
+    <SignOutButton client:load />
+  </div>
+</AppLayout>

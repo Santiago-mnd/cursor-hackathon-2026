@@ -5,7 +5,7 @@ import Wordmark from '../components/Wordmark.astro';
 interface Props {
   title: string;
   description: string;
-  section: 'charge' | 'history';
+  section: 'charge' | 'history' | 'account';
 }
 
 const { title, description, section } = Astro.props;
@@ -18,13 +18,14 @@ const items = [
     icon: 'M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3',
   },
   { key: 'history', href: '/cobros', label: 'Cobros', icon: 'M4 6h16M4 12h16M4 18h10' },
+  { key: 'account', href: '/cuenta', label: 'Cuenta', icon: 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0' },
 ] as const;
 ---
 
 <BaseLayout title={title} description={description}>
   <div class="flex min-h-dvh flex-col md:flex-row">
     <nav
-      class="order-last sticky bottom-0 z-10 grid grid-cols-2 border-t border-line bg-paper pb-[env(safe-area-inset-bottom)] md:order-first md:flex md:h-dvh md:w-24 md:flex-col md:gap-2 md:border-t-0 md:border-r md:px-3 md:py-6 lg:w-52"
+      class="order-last sticky bottom-0 z-10 grid grid-cols-3 border-t border-line bg-paper pb-[env(safe-area-inset-bottom)] md:order-first md:flex md:h-dvh md:w-24 md:flex-col md:gap-2 md:border-t-0 md:border-r md:px-3 md:py-6 lg:w-52"
       aria-label="Secciones"
     >
       <a href="/" class="hidden px-2 pb-4 text-xl md:block"><Wordmark /></a>

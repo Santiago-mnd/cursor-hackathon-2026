@@ -4,10 +4,10 @@ import { PeyError } from '../../../lib/pey';
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   try {
     const input = parseNewCharge(await request.json().catch(() => null));
-    const charge = await createCharge(input);
+    const charge = await createCharge(input, locals.user!.uid);
     return Response.json(charge, { status: 201 });
   } catch (error) {
     if (error instanceof ChargeInputError) return Response.json({ error: error.message }, { status: 400 });

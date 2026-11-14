@@ -1,6 +1,5 @@
 import { getApps, initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
 import {
   PUBLIC_FIREBASE_API_KEY,
   PUBLIC_FIREBASE_APP_ID,
@@ -18,4 +17,3 @@ const app =
   });
 
 export const auth = getAuth(app);
-export const db = getFirestore(app);
