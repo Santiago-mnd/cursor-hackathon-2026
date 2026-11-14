@@ -2,6 +2,38 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Wordmark from '../components/Wordmark.astro';
 
+const CHARGED = 5;
+const formatSigned = (value: number) => `${value < 0 ? '−' : ''}$${Math.abs(value).toFixed(2)}`;
+const percentOf = (value: number) => Math.round((value / CHARGED) * 100);
+
+const receipts = [
+  {
+    title: 'Cobro real',
+    titlePrefix: '',
+    highlight: false,
+    rows: [
+      { label: 'Cobro', value: CHARGED },
+      { label: 'Cargo de la app', value: -4.84 },
+    ],
+    keptLabel: 'Le quedaron',
+    kept: 0.16,
+    percentLabel: `${percentOf(0.16)} % del cobro`,
+    barLabel: `De este cobro de $5.00, al vendedor le quedaron $0.16: el ${percentOf(0.16)} %.`,
+  },
+  {
+    title: 'Con DeUna',
+    titlePrefix: 'Con',
+    highlight: true,
+    rows: [
+      { label: 'Cobro', value: CHARGED },
+      { label: 'Comisión de DeUna', value: 0 },
+    ],
+    keptLabel: 'Te quedan',
+    kept: CHARGED,
+    percentLabel: `${percentOf(CHARGED)} % del cobro`,
+    barLabel: `Con DeUna, de este cobro de $5.00 te quedan $5.00: el ${percentOf(CHARGED)} %.`,
+  },
+];
 ---
 
 <BaseLayout
@@ -47,17 +79,52 @@ import Wordmark from '../components/Wordmark.astro';
     </section>
 
     <section class="mx-auto grid max-w-5xl gap-8 px-5 py-14 md:px-8">
-      <div class="grid gap-5">
-        <h2 class="text-4xl leading-[1.05] font-bold tracking-tight text-balance md:text-5xl">Cobró $5; le quedaron $0.16</h2>
-        <div class="grid max-w-md gap-3">
-          <div class="grid grid-cols-[1fr_auto] gap-y-1.5 text-lg">
-            <span class="text-ink-soft">Cargo de la app</span><span class="num text-fail-ink">−$4.84</span>
-            <span class="font-bold">Le quedaron</span><span class="num font-bold">$0.16</span>
-          </div>
-          <div class="grid grid-cols-[1fr_auto] items-center rounded-xl bg-paid px-4 py-3 text-lg">
-            <span class="font-bold">Con DeUna le quedan</span><span class="num font-bold">$5.00</span>
-          </div>
-        </div>
+      <h2 class="text-4xl leading-[1.05] font-bold tracking-tight text-balance md:text-5xl">Cobró $5; le quedaron $0.16</h2>
+      <div class="grid gap-4 md:grid-cols-2">
+        {
+          receipts.map((receipt) => (
+            <article
+              class:list={[
+                'grid content-start gap-4 rounded-[var(--radius-card)] p-5 md:p-6',
+                receipt.highlight ? 'bg-paid' : 'border border-line bg-paper',
+              ]}
+            >
+              <h3 class="text-lg font-bold">
+                {receipt.highlight ? (
+                  <>
+                    {receipt.titlePrefix} <Wordmark />
+                  </>
+                ) : (
+                  receipt.title
+                )}
+              </h3>
+              <dl class="grid grid-cols-[1fr_auto] gap-x-4 gap-y-2 text-lg">
+                {receipt.rows.map((row) => (
+                  <>
+                    <dt class={receipt.highlight ? '' : 'text-ink-soft'}>{row.label}</dt>
+                    <dd class:list={['num text-right', row.value < 0 && 'text-fail-ink']}>{formatSigned(row.value)}</dd>
+                  </>
+                ))}
+                <div class="col-span-2 my-1 border-t border-dashed border-ink" aria-hidden="true" />
+                <dt class="self-center font-bold">{receipt.keptLabel}</dt>
+                <dd class="num text-right text-2xl font-bold">{formatSigned(receipt.kept)}</dd>
+              </dl>
+              <div class="grid gap-2">
+                <div
+                  class:list={['h-3 overflow-hidden rounded-full', receipt.highlight ? 'bg-paper/60' : 'bg-off']}
+                  role="img"
+                  aria-label={receipt.barLabel}
+                >
+                  <div
+                    class:list={['h-full min-w-1 rounded-full', receipt.highlight ? 'bg-paid-ink' : 'bg-fail-ink']}
+                    style={`width: ${(receipt.kept / CHARGED) * 100}%`}
+                  />
+                </div>
+                <span class="num text-sm font-medium" aria-hidden="true">{receipt.percentLabel}</span>
+              </div>
+            </article>
+          ))
+        }
       </div>
     </section>
 
