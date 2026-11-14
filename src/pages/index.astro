@@ -1,0 +1,108 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Wordmark from '../components/Wordmark.astro';
+
+---
+
+<BaseLayout
+  title="DeUna · Cobra completo, aunque no traigan efectivo"
+  description="Cobra desde tu celular con CoDi. El dinero llega directo a tu cuenta bancaria, sin comisión por cobro."
+>
+  <header class="mx-auto flex max-w-5xl items-center justify-between px-5 py-5 md:px-8">
+    <Wordmark class="text-2xl" />
+    <a href="/cobrar" class="text-sm font-medium underline underline-offset-4">Haz tu primer cobro</a>
+  </header>
+
+  <main>
+    <section class="bg-brand text-brand-ink">
+      <div class="mx-auto grid max-w-5xl gap-10 px-5 py-12 md:grid-cols-[1fr_minmax(0,280px)] md:items-stretch md:gap-12 md:px-8 md:py-20">
+        <div class="grid content-start gap-5">
+          <p class="num text-sm tracking-wider uppercase">Cobra de una. Sigue vendiendo.</p>
+          <h1 class="text-5xl leading-[1.02] font-bold tracking-tight text-balance md:text-7xl">
+            Cobra completo, aunque no traigan efectivo
+          </h1>
+          <p class="max-w-[46ch] text-lg leading-snug">
+            Con DeUna cobras desde tu celular con CoDi. El dinero llega directo a tu cuenta bancaria, sin comisión por cobro.
+          </p>
+          <a
+            href="/cobrar"
+            class="inline-flex h-14 w-full items-center justify-center rounded-[var(--radius-control)] bg-paper px-6 text-lg font-bold text-ink sm:w-auto sm:justify-self-start"
+          >
+            Haz tu primer cobro
+          </a>
+        </div>
+        <figure class="flex flex-col items-center gap-3 md:items-stretch">
+          <div class="w-full max-w-[280px] md:relative md:max-w-none md:flex-1">
+            <img
+              src="/comprobante-cobro.jpg"
+              width="600"
+              height="1050"
+              alt="Comprobante real de una app de cobro: cobro de $5, cargo de $4.84 y total recibido de $0.16. La marca y los datos personales están tapados."
+              class="w-full rounded-[var(--radius-card)] bg-paper md:absolute md:inset-0 md:h-full md:object-cover md:object-top"
+            />
+          </div>
+          <figcaption class="text-center text-sm">Comprobante real de una app de cobro; tapamos la marca y los datos personales.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="mx-auto grid max-w-5xl gap-8 px-5 py-14 md:px-8">
+      <div class="grid gap-5">
+        <h2 class="text-4xl leading-[1.05] font-bold tracking-tight text-balance md:text-5xl">Cobró $5; le quedaron $0.16</h2>
+        <div class="grid max-w-md gap-3">
+          <div class="grid grid-cols-[1fr_auto] gap-y-1.5 text-lg">
+            <span class="text-ink-soft">Cargo de la app</span><span class="num text-fail-ink">−$4.84</span>
+            <span class="font-bold">Le quedaron</span><span class="num font-bold">$0.16</span>
+          </div>
+          <div class="grid grid-cols-[1fr_auto] items-center rounded-xl bg-paid px-4 py-3 text-lg">
+            <span class="font-bold">Con DeUna le quedan</span><span class="num font-bold">$5.00</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mx-auto grid max-w-5xl gap-4 px-5 py-14 md:px-8">
+      <h2 class="text-3xl font-bold">Cobrar desde tu celular</h2>
+      <p class="max-w-[60ch] text-lg leading-snug">
+        Abre DeUna en el navegador; no tienes que descargar nada. Si tienes al cliente enfrente, muéstrale el QR para que lo
+        escanee con la app de su banco. También puedes mandarle el cobro a su celular con su número de 10 dígitos. Cuando
+        pague, la pantalla cambia sola a «¡Pagado!».
+      </p>
+    </section>
+
+    <section class="bg-stage">
+      <div class="mx-auto grid max-w-5xl gap-4 px-5 py-14 md:px-8">
+        <h2 class="text-3xl font-bold">Tu venta a la vista</h2>
+        <p class="max-w-[60ch] text-lg leading-snug">
+          El dinero llega directo a tu cuenta, de banco a banco, por CoDi; DeUna no te cobra comisión por cobro. En Cobros ves
+          cuánto cobraste hoy, cuántos cobros hiciste y el estado de cada uno.
+        </p>
+      </div>
+    </section>
+
+    <section class="mx-auto grid max-w-5xl gap-4 px-5 py-14 md:px-8">
+      <h2 class="text-3xl font-bold">Preguntas frecuentes</h2>
+      <div class="grid gap-1">
+        <h3 class="text-lg font-bold">¿Necesito descargar una app?</h3>
+        <p class="text-ink-soft">No. Abre DeUna en el navegador de tu celular; si quieres, agrégala a tu pantalla de inicio.</p>
+      </div>
+    </section>
+
+    <section class="mx-auto grid max-w-5xl justify-items-start gap-4 px-5 pb-20 md:px-8">
+      <p class="text-3xl font-bold text-balance">Cobra de una. Sigue vendiendo.</p>
+      <a
+        href="/cobrar"
+        class="inline-flex h-14 w-full items-center justify-center rounded-[var(--radius-control)] bg-brand px-6 text-lg font-bold text-brand-ink sm:w-auto"
+      >
+        Haz tu primer cobro
+      </a>
+    </section>
+  </main>
+
+  <footer class="border-t border-line">
+    <div class="mx-auto flex max-w-5xl flex-wrap justify-between gap-2 px-5 py-6 text-sm text-ink-soft md:px-8">
+      <Wordmark />
+      <span>Hecho en Cursor Hackatón México CDMX, noviembre de 2026; con CoDi y la API de pey.</span>
+    </div>
+  </footer>
+</BaseLayout>

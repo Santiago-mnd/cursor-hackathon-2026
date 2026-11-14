@@ -1,0 +1,33 @@
+---
+import StatusChip from './StatusChip.astro';
+import { effectiveStatus, formatMoney, formatTime, type Charge } from '../lib/charge';
+
+interface Props {
+  charges: Charge[];
+}
+
+const { charges } = Astro.props;
+const methodLabel = { qr: 'QR', phone: 'Celular' } as const;
+---
+
+{
+  charges.length === 0 ? (
+    <p class="py-6 text-ink-soft">Aún no tienes cobros hoy</p>
+  ) : (
+    <ul class="grid">
+      {charges.map((charge) => (
+        <li class="grid grid-cols-[1fr_auto] gap-x-3 gap-y-1 border-b border-line py-3">
+          <span class="num text-[19px]">{formatMoney(charge.amount)}</span>
+          <span class="num text-right text-[13px] text-ink-soft">{formatTime(charge.createdAt)}</span>
+          <span class="truncate text-sm text-ink-soft">
+            {charge.concept ? `${charge.concept} · ` : ''}
+            {methodLabel[charge.method]}
+          </span>
+          <span class="justify-self-end">
+            <StatusChip status={effectiveStatus(charge)} />
+          </span>
+        </li>
+      ))}
+    </ul>
+  )
+}
