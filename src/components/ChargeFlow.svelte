@@ -294,9 +294,17 @@
             <path d="M5 12.5l4.5 4.5L19 7.5" />
           </svg>
         </span>
-        <p class="mt-4 text-[44px] leading-none font-bold">¡Pagado!</p>
-        <p class="num text-[56px] tracking-tight">{money.format(charge.amount)}</p>
-        <p class="text-base">Dinero en tu cuenta, sin comisión</p>
+        {#if charge.chargedAmount !== undefined && charge.chargedAmount < charge.amount}
+          <p class="mt-4 text-[44px] leading-none font-bold text-balance">¡Pago de prueba!</p>
+          <p class="mt-2 text-base">Recibiste</p>
+          <p class="num text-[56px] leading-none tracking-tight">{money.format(charge.chargedAmount)}</p>
+          <p class="mt-2 text-lg">Venta registrada: <strong class="num">{money.format(charge.amount)}</strong></p>
+          <p class="text-base">La venta completa quedó en Cobros.</p>
+        {:else}
+          <p class="mt-4 text-[44px] leading-none font-bold">¡Pagado!</p>
+          <p class="num text-[56px] tracking-tight">{money.format(charge.amount)}</p>
+          <p class="text-base">Dinero en tu cuenta, sin comisión</p>
+        {/if}
         <button
           type="button"
           class="mt-auto h-14 w-full max-w-sm rounded-[var(--radius-control)] bg-ink text-lg font-bold text-paper"
