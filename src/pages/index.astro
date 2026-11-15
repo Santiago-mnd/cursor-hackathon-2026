@@ -206,9 +206,24 @@ const receipts = [
   </main>
 
   <footer class="border-t border-line">
-    <div class="mx-auto flex max-w-5xl flex-wrap justify-between gap-2 px-5 py-6 text-sm text-ink-soft md:px-8">
-      <Wordmark />
-      <span>Hecho en Cursor Hackatón México CDMX, noviembre de 2026; con CoDi y la API de pey.</span>
+    <div class="mx-auto grid max-w-5xl gap-2 px-5 py-6 text-sm text-ink-soft md:px-8">
+      <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+        <Wordmark class="text-base text-ink" />
+        <p>
+          Con tecnología de <a href="https://pey.mx" target="_blank" rel="noopener" class="font-bold text-ink underline underline-offset-4"
+            >pey</a
+          >
+        </p>
+      </div>
+      <p class="max-w-[70ch] leading-relaxed">
+        DeUna es una demo creada en el Cursor Hackatón México CDMX el 14 de noviembre de 2026. Cada cobro real es de $0.01, no se
+        devuelve y llega a una sola cuenta de prueba proporcionada por pey para el evento, no a tu cuenta; consulta el <a
+          href="https://github.com/Santiago-mnd/cursor-hackathon-2026"
+          target="_blank"
+          rel="noopener"
+          class="text-ink underline underline-offset-4">código en GitHub</a
+        >, publicado con licencia AGPL-3.0.
+      </p>
     </div>
   </footer>
 </BaseLayout>
