@@ -17,15 +17,20 @@ export const POST: APIRoute = async ({ request }) => {
   }
   if (!webhookId) return new Response('falta webhook-id', { status: 400 });
 
-  const store = await getStore();
-  const isNew = await store.recordEvent(webhookId, event);
-  if (!isNew) return new Response('duplicado', { status: 200 });
+  try {
+    const store = await getStore();
+    if (await store.hasEvent(webhookId)) return new Response('duplicado', { status: 200 });
 
-  if (PAID_EVENTS.has(event.type)) {
-    const peyRef = peyRefFromEvent(event);
-    const charge = peyRef ? await store.findByPeyRef(peyRef) : null;
-    if (charge) await store.markPaid(charge.id, Date.now());
-    else console.warn('webhook sin cobro', event.type, peyRef);
+    if (PAID_EVENTS.has(event.type)) {
+      const peyRef = peyRefFromEvent(event);
+      const charge = peyRef ? await store.findByPeyRef(peyRef) : null;
+      if (charge) await store.markPaid(charge.id, Date.now());
+      else console.warn('webhook sin cobro', event.type, peyRef);
+    }
+    await store.recordEvent(webhookId, event);
+    return new Response('ok', { status: 200 });
+  } catch (error) {
+    console.error('webhook pey', webhookId, error);
+    return new Response('error al procesar; reintenta', { status: 500 });
   }
-  return new Response('ok', { status: 200 });
 };
