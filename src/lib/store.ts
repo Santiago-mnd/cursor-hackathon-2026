@@ -8,7 +8,8 @@ export interface ChargeStore {
   findByPeyRef(peyRef: string): Promise<Charge | null>;
   markPaid(id: string, paidAt: number): Promise<void>;
   listSince(vendorId: string, since: number): Promise<Charge[]>;
-  recordEvent(eventId: string, event: unknown): Promise<boolean>;
+  hasEvent(eventId: string): Promise<boolean>;
+  recordEvent(eventId: string, event: unknown): Promise<void>;
 }
 
 class FirestoreStore implements ChargeStore {
@@ -29,7 +30,12 @@ class FirestoreStore implements ChargeStore {
   }
 
   async markPaid(id: string, paidAt: number) {
-    await this.db.collection('charges').doc(id).update({ status: 'paid', paidAt });
+    const ref = this.db.collection('charges').doc(id);
+    await this.db.runTransaction(async (transaction) => {
+      const snap = await transaction.get(ref);
+      if (!snap.exists || snap.get('status') === 'paid') return;
+      transaction.update(ref, { status: 'paid', paidAt });
+    });
   }
 
   async listSince(vendorId: string, since: number) {
@@ -43,13 +49,13 @@ class FirestoreStore implements ChargeStore {
     return snap.docs.map((doc) => doc.data() as Charge);
   }
 
+  async hasEvent(eventId: string) {
+    const snap = await this.db.collection('webhookEvents').doc(eventId).get();
+    return snap.exists;
+  }
+
   async recordEvent(eventId: string, event: unknown) {
-    return this.db
-      .collection('webhookEvents')
-      .doc(eventId)
-      .create({ event, receivedAt: Date.now() })
-      .then(() => true)
-      .catch(() => false);
+    await this.db.collection('webhookEvents').doc(eventId).set({ event, receivedAt: Date.now() });
   }
 }
 
@@ -71,7 +77,7 @@ class MemoryStore implements ChargeStore {
 
   async markPaid(id: string, paidAt: number) {
     const charge = this.charges.get(id);
-    if (charge) this.charges.set(id, { ...charge, status: 'paid', paidAt });
+    if (charge && charge.status !== 'paid') this.charges.set(id, { ...charge, status: 'paid', paidAt });
   }
 
   async listSince(vendorId: string, since: number) {
@@ -80,10 +86,12 @@ class MemoryStore implements ChargeStore {
       .sort((a, b) => b.createdAt - a.createdAt);
   }
 
+  async hasEvent(eventId: string) {
+    return this.events.has(eventId);
+  }
+
   async recordEvent(eventId: string) {
-    if (this.events.has(eventId)) return false;
     this.events.add(eventId);
-    return true;
   }
 }
 
