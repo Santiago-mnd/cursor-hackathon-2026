@@ -17,7 +17,7 @@
     chargedAmount?: number;
   }
 
-  const NOTICE_KEY = 'deuna.demo-notice.v1';
+  const NOTICE_KEY = 'deuna.demo-notice.v2';
 
   let { mock = false, cap = null }: { mock?: boolean; cap?: number | null } = $props();
 
@@ -382,8 +382,12 @@
   >
     <h2 id="demo-notice-title" class="text-2xl font-bold">Cobros de prueba</h2>
     <p class="mt-3 text-base leading-relaxed">
-      Durante la demo, cobrarás <strong>{money.format(cap)} por venta</strong>, aunque el total sea mayor. Tu cliente paga ese centavo
-      desde su app bancaria y no se devuelve; DeUna conserva el total, los productos y el resumen del día.
+      Durante esta demo, <strong>cada cobro real es de {money.format(cap)}</strong>, aunque el total de la venta sea mayor. Tu cliente
+      paga ese centavo desde su app bancaria y no se devuelve; DeUna conserva el total, los productos y el resumen del día.
+    </p>
+    <p class="mt-3 text-base leading-relaxed">
+      Todos los cobros, por QR o al celular, llegan a <strong>una sola cuenta de prueba</strong>, no a tu cuenta. Queremos que después
+      puedas registrar tu propia CLABE para recibir el dinero directamente.
     </p>
     <button type="button" class="mt-6 h-12 w-full rounded-[var(--radius-control)] bg-ink text-lg font-bold text-paper" onclick={closeNotice}>
       Entendido

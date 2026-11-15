@@ -29,6 +29,13 @@ const user = Astro.locals.user!;
         <dd class="text-lg break-all">{user.email || '—'}</dd>
       </div>
     </dl>
+    <section class="grid gap-1.5 rounded-[var(--radius-card)] bg-off p-5" aria-labelledby="deposit-account-title">
+      <h2 id="deposit-account-title" class="text-lg font-bold">Cuenta para cobros</h2>
+      <p class="text-base leading-snug">
+        Durante la demo, todos los cobros por QR o al celular llegan a una sola cuenta de prueba; el dinero no te llega a ti. Buscamos
+        que puedas registrar tu CLABE para recibir tus cobros directamente.
+      </p>
+    </section>
     <SignOutButton client:load />
   </div>
 </AppLayout>
